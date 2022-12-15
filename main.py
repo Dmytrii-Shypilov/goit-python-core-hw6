@@ -47,6 +47,24 @@ def create_folder(path, name):
     os.makedirs(f"{path}\\{name}", exist_ok=True)
 
 
+def handle_archives(file, path, type):
+    normalized_name = normalize(file.name)  
+    archive_name = normalized_name.split('.')[0]
+    shutil.unpack_archive(f"{path}\\{file.name}",f"{path}\\{type}\\{archive_name}")
+
+def handle_files(file, path, type):
+    normalized_name = normalize(file.name)   
+    shutil.move(f"{path}\\{file.name}",f"{path}\\{type}\\{normalized_name}")
+
+def handle_folder(file, path):
+    if len(os.listdir(file)) == 0:
+        os.rmdir(file)   
+    if file.name not in FILES_DATA and file.exists():
+        normalized_name = normalize(file.name)
+        sort_folder(file) 
+        os.rename(file, f"{path}\\{normalized_name}" )
+
+
 def sort_folder(folder_path):
     path = Path(folder_path)
 
@@ -58,20 +76,11 @@ def sort_folder(folder_path):
             if file.name.split('.')[-1].lower() in FILES_DATA[type]:
                 create_folder(path, type)  
                 if type == "archives":
-                    normalized_name = normalize(file.name)  
-                    archive_name = normalized_name.split('.')[0]
-                    shutil.unpack_archive(f"{path}\\{file.name}",f"{path}\\{type}\\{archive_name}")
+                    handle_archives(file, path, type)
                 else:
-                    normalized_name = normalize(file.name)   
-                    shutil.move(f"{path}\\{file.name}",f"{path}\\{type}\\{normalized_name}")
-
-            if file.is_dir():  
-                if len(os.listdir(file)) == 0:
-                    os.rmdir(file)   
-                if file.name not in FILES_DATA and file.exists():
-                    normalized_name = normalize(file.name)
-                    sort_folder(file) 
-                    os.rename(file, f"{path}\\{normalized_name}" )
+                    handle_files(file, path, type)
+            if file.is_dir(): 
+                handle_folder(file, path)
               
                           
                    
