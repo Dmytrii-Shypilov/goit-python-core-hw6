@@ -69,8 +69,6 @@ def sort_folder(folder_path):
     path = Path(folder_path)
 
     for file in path.iterdir():
-         if len(file.name.split('.')) < 2 and not file.is_dir():
-            continue
 
          for type in FILES_DATA:
             if file.name.split('.')[-1].lower() in FILES_DATA[type]:
