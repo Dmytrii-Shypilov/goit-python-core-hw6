@@ -26,21 +26,19 @@ directory = sys.argv[1]
 
 
 def normalize(name):
-    split_name = name.split('.')
-    split_prefix = list(split_name[0])
+    dot_idx = name.rindex('.')
+    prefix = list(name[:dot_idx])
+    format = name[dot_idx : len(name)]
 
-    for idx, letter in enumerate(split_prefix):
+    for idx, letter in enumerate(prefix):
         char = ord(letter)
 
         if char in TRANS:
-            split_prefix[idx] = TRANS[char]
+            prefix[idx] = TRANS[char]
         elif not letter.isnumeric() and char not in range(65, 91) and char not in range(97, 123):
-            split_prefix[idx] = '_'
+            prefix[idx] = '_'
 
-    if len(split_name) == 1:
-        return "".join(split_prefix)
-    else:
-        return f'{"".join(split_prefix)}.{split_name[-1]}'
+    return f'{"".join(prefix)}{format}'
 
 
 def create_folder(path, name):
