@@ -26,9 +26,13 @@ directory = sys.argv[1]
 
 
 def normalize(name):
-    dot_idx = name.rindex('.')
-    prefix = list(name[:dot_idx])
-    format = name[dot_idx : len(name)]
+    if len(name.split('.')) == 1:
+        prefix = list(name)
+        format = ''
+    else:
+        dot_idx = name.rindex('.')
+        prefix = list(name[:dot_idx])
+        format = name[dot_idx : len(name)]
 
     for idx, letter in enumerate(prefix):
         char = ord(letter)
