@@ -79,8 +79,8 @@ def sort_folder(folder_path):
                     handle_archives(file, path, type)
                 else:
                     handle_files(file, path, type)
-            if file.is_dir(): 
-                handle_folder(file, path)
+         if file.is_dir(): 
+            handle_folder(file, path)
               
                           
                    
